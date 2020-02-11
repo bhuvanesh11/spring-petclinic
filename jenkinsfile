@@ -3,7 +3,7 @@ node {
      choice(name: 'COUNTRY', choices: ['CH','UK','BE','AT','CL','IE','NL','TEST'], description: 'Pick something')
      choice(name: 'GROUP', choices: ['PRE-PROD','PROD','TEST'], description: 'Pick something')
    }
-  Update_JIRA('STARTED')
+  
   stage ('checkout')
     {
       def current_stage = "${env.STAGE_NAME}"
