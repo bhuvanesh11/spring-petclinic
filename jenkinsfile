@@ -1,0 +1,49 @@
+node {
+   parameters {
+     choice(name: 'COUNTRY', choices: ['CH','UK','BE','AT','CL','IE','NL','TEST'], description: 'Pick something')
+     choice(name: 'GROUP', choices: ['PRE-PROD','PROD','TEST'], description: 'Pick something')
+   }
+  Update_JIRA('STARTED')
+  stage ('checkout')
+    {
+      def current_stage = "${env.STAGE_NAME}"
+      try
+      {
+        git 'https://github.com/bhuvanesh11/spring-petclinic12345.git'
+        def result = 'SUCCESS'
+        Update_JIRA( current_stage, result )
+
+      }
+      catch(ex)
+      {
+        def result = 'FAILED'
+        Update_JIRA( current_stage , result )
+      }
+    }
+
+ }
+  def Update_JIRA(String stage= 'STARTED', String result)
+  {
+    withEnv(['JIRA_SITE=JIRA'])
+    {
+	     def startnotification = 'Build started'
+         def makeinprogress = [ transition: [ id: '21' ] ]
+	      if (stage == 'STARTED')
+	       {
+		    jiraTransitionIssue idOrKey: "${params.IssueId}" , input: makeinprogress
+            def comment = [ body: 'Starting Build' ]
+            sh """
+            python3 ./skypenotify.py '${stage}' "${params.COUNTRY}" "${params.ENVIRONMENT}"
+            """
+	       }
+	      else if ( stage == 'checkout' && 'SUCCESS')
+	       {
+            def comment = [ body : 'Checking out git' ]
+            jiraAddComment idOrKey: "${params.IssueId}", input: comment
+            sh """
+            python3 ./skypenotify.py '${stage}' "${params.COUNTRY}" "${params.ENVIRONMENT}"
+            """
+		     }
+    }
+  }
+
