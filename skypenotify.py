@@ -33,8 +33,12 @@ def selectstage(stage):
     skypemessage = "Checking out GIT"
   elif (stage == 'STARTED'):
     skypemessage = "Updating JIRA ISSUE"
+  elif (stage == 'Maven Build'):
+    skypemessage = "Building JAR file"
+  elif (stage == 'Docker Image Build'):
+    skypemessage = "Building docker image and running it"
   else :
-    skypemessage = "No Update"
+    skypemessage = " Job failed"
   return skypemessage
     
 stage = inputlist[1]
