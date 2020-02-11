@@ -1,7 +1,7 @@
 from skpy import *
-import sys
+import os
 import base64
-
+import sys
 #SkypegroupIDs
 
 PreProd_CH = "19:60a2b5c7b97e425ebc108606add74c97@thread.skype"
@@ -22,12 +22,26 @@ TEST_POC = "19:de0f09a0026240e69df3a4d6a9f18d96@thread.skype"
 
 #get input from jenkinsfile
 inputlist = sys.argv
-notifymessage = ""
-notifymessage = ' '.join(inputlist[1:])
-notifymessage = notifymessage.replace("[body:","")
-notifymessage = notifymessage.replace(inputlist[-2],"")
+#notifymessage = ""
+#notifymessage = ' '.join(inputlist[1:])
+#notifymessage = notifymessage.replace("[body:","")
+#notifymessage = notifymessage.replace(inputlist[-2],"")
 
-#Encoding password
+def selectstage(stage):
+
+  if ( stage == 'checkout'):
+    skypemessage = "Checking out GIT"
+  elif (stage == 'STARTED'):
+    skypemessage = "Updating JIRA ISSUE"
+  else :
+    skypemessage = "No Update"
+  return skypemessage
+    
+stage = inputlist[1]
+#print (stage)
+msg=selectstage(stage)
+
+#encoding password
 password = base64.b64decode("TG9uZG9ucGFyaXNAMQ==").decode("utf-8")
 #skype id
 sk = Skype("bhuvanesh0311@gmail.com", password)
@@ -36,5 +50,6 @@ country = sys.argv[-1]
 env = sys.argv[-2]
 if ( country  == "TEST" and env == "TEST" ):
         ch = sk.chats[TEST_POC]
-        ch.sendMsg(notifymessage)
+        ch.sendMsg(msg)
+
 
