@@ -42,7 +42,7 @@ stage = inputlist[1]
 msg=selectstage(stage)
 
 #encoding password
-password = base64.b64decode("TG9uZG9ucGFyaXNAMQ==").decode("utf-8")
+password = base64.b64decode("U3RhY2NhdG9AMTIzNDU=").decode("utf-8")
 #skype id
 sk = Skype("bhuvanesh0311@gmail.com", password)
 #Skype username and password
